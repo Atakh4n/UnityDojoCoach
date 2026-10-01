@@ -36,8 +36,9 @@ As a student, I want to see my current challenge, completed challenge count, and
 
 1. **Given** an existing progress record, **When** I run `dojo status`, **Then** it shows the current challenge, completed challenge count, and total hints used.
 2. **Given** no progress record, **When** I run `dojo status`, **Then** it shows no active challenge, zero completed challenges, and zero hints used.
-3. **Given** an empty curriculum, **When** I run `dojo status`, **Then** it shows no current challenge and zero counts.
+3. **Given** an empty curriculum and no saved progress, **When** I run `dojo status`, **Then** it shows no current challenge and zero counts.
 4. **Given** I have advanced from one challenge to another with `dojo next`, **When** I run `dojo status` in a new session, **Then** it shows the new active challenge and a completed count of one.
+5. **Given** saved progress references unavailable challenge definitions, **When** I run `dojo status`, **Then** it reports unavailable IDs and displays the saved completed count and hint total without changing the file.
 
 ---
 
@@ -61,6 +62,8 @@ As a student, I want help with the current challenge in small steps so I can kee
 - Missing progress is treated as a fresh start and saved when a command first changes progress.
 - Malformed progress or challenge content produces a clear error; existing student data is not silently overwritten.
 - Missing or empty curriculum produces an informative result rather than a crash.
+- Missing definitions never delete, reset, or silently rewrite existing progress. An unavailable active challenge makes `next` and `hint` fail without changing progress.
+- A failed save preserves the previous valid progress file without truncation or partial overwrite; no successful advancement or newly revealed hint is reported before saving succeeds.
 - Calling `dojo next` with an active challenge self-declares it complete; no code validation is performed.
 - Calling `dojo next` after the curriculum is complete does not duplicate a completed ID.
 - Guidance exhausted for the current challenge reports that no more hints are available and does not reveal a complete solution.
@@ -74,14 +77,14 @@ As a student, I want help with the current challenge in small steps so I can kee
 - **FR-002**: The application MUST find C# challenges stored under `curriculum/csharp/` and present them in a stable, explicit curriculum order.
 - **FR-003**: Each challenge MUST provide a stable identifier, title, task description, and four ordered guidance prompts: a guiding question, small hint, conceptual explanation, and pseudocode. It MUST NOT include a complete solution in those prompts.
 - **FR-004**: The application MUST maintain local student progress in JSON, including the active challenge, completed challenge identifiers, and per-challenge hint usage.
-- **FR-005**: `dojo status` MUST display the active challenge or explicitly show that none is active, the count of distinct completed challenges, and the total hints revealed.
+- **FR-005**: `dojo status` MUST display the active challenge (or its saved ID marked unavailable) or explicitly show that none is active, the count of distinct saved completed challenges, and the total saved hints revealed. Fresh progress with empty curriculum MUST show no active challenge and zero counts.
 - **FR-006**: If no challenge is active, `dojo next` MUST activate and show the first available challenge without marking a challenge completed.
 - **FR-007**: If a challenge is active, `dojo next` MUST mark it completed, persist its ID, and activate and show the next challenge; if no challenge remains, it MUST show that the curriculum is complete and leave none active.
 - **FR-008**: `dojo hint` MUST reveal only the next unrevealed hint for the active challenge, in authored order, and increment persisted hint usage once per newly revealed hint.
 - **FR-009**: When no hints remain or no challenge is active, `dojo hint` MUST report that state without changing hint usage.
 - **FR-010**: `dojo hint` MUST reveal guidance in the order guiding question, small hint, conceptual explanation, then pseudocode. It MUST never reveal a complete solution. This version MUST NOT offer a solution-unlock command.
 - **FR-011**: The application MUST persist changed progress so a later invocation reports the same active challenge, completed IDs, and hint usage.
-- **FR-012**: The application MUST present clear results for missing challenges, exhausted hints, malformed challenge data, and unreadable progress without silently resetting valid progress.
+- **FR-012**: The application MUST present clear results for missing challenges, exhausted hints, malformed challenge data, and unreadable progress without silently resetting valid progress. Missing definitions MUST NOT invalidate or remove saved IDs/counts. `next` and `hint` MUST fail without modifying progress when a required definition is unavailable; failed saves MUST preserve the previous valid file without partial overwrite.
 - **FR-013**: The application MUST NOT create, edit, or repair challenge solutions in `StudentWork/`.
 - **FR-014**: Challenge completion MUST be self-declared through `dojo next`; this version MUST NOT add automated code validation or a separate completion command.
 

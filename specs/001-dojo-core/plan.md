@@ -64,7 +64,7 @@ specs/001-dojo-core/
 ├── data-model.md
 ├── contracts/cli.md
 ├── quickstart.md
-└── tasks.md                 # Later output of $speckit-tasks; not created here
+└── tasks.md                 # Dependency-ordered implementation and validation work
 ```
 
 ### Source Code (repository root)
@@ -84,13 +84,32 @@ curriculum/csharp/
 └── 002-*.json
 tests/Dojo.Tests/
 ├── Dojo.Tests.csproj
-└── DojoTests.cs              # Temporary-directory behavior and CLI checks
+├── DojoWorkspace.cs          # Isolated curriculum/progress fixtures
+├── NextCliTests.cs
+├── NextStateTests.cs
+├── StatusCliTests.cs
+├── StatusStateTests.cs
+├── HintCliTests.cs
+├── HintStateTests.cs
+├── ErrorTests.cs             # Shared errors and argument validation
+└── ProgressSaveTests.cs      # Failed-write and replacement preservation
 ```
 
 **Structure Decision**: One production project and one test project are enough. Keep files named
 for the responsibility a junior developer will look for. Use direct constructors and simple
 methods; add no generic repository, command framework, dependency injection container, or
 persistence abstraction. Tests may run the app against temporary curriculum and progress data.
+
+Set `<AssemblyName>dojo</AssemblyName>` and `<UseAppHost>true</UseAppHost>` in `Dojo.csproj`.
+Development uses `dotnet run --project src/Dojo/Dojo.csproj -- <command>`; local Windows use
+builds Release and invokes `.\src\Dojo\bin\Release\net10.0\dojo.exe <command>` from the
+repository root. See the quickstart for both invocation paths.
+
+Treat missing catalog references as unavailable definitions, not corrupt progress. Status
+retains saved totals and reports unavailable IDs. Guard `next` and `hint` before mutation when
+the active definition is unavailable. Preserve historical IDs and counts during later valid
+saves. Write a temporary file before replacement and publish success/hint output only after
+the save succeeds; test that both write and replacement failures preserve the original bytes.
 
 ## Build and Validation Strategy
 
@@ -99,11 +118,19 @@ persistence abstraction. Tests may run the app against temporary curriculum and 
    at least two challenges, four progressive prompts each, and no solutions.
 2. Add `.dojo/`, `**/bin/`, and `**/obj/` to the root `.gitignore` before exercising local progress.
    Do not edit `StudentWork/` or include local progress in a commit.
-3. Run `dotnet restore`, `dotnet build`, and `dotnet test`. Tests cover fresh status, first
+3. Restore and build at setup and each story checkpoint. Categorize story tests as `US1`,
+   `US2`, and `US3`. Run only `TestCategory=US1` at the next checkpoint and
+   `TestCategory=US1|TestCategory=US2` at the status checkpoint; use `TestCategory=US3`
+   for hint's initial failing tests. Run the full suite only after all three commands exist.
+   Tests cover fresh status, first
    activation, advancement and final completion, persistence across invocations, hint order and
    exhaustion, duplicate prevention, missing/invalid curriculum, malformed progress, and error
-   exit codes. Check that errors leave valid progress unchanged.
+   exit codes. Check preserved counts for unavailable definitions and byte-for-byte preservation
+   after temporary-write/replacement failures. Argument errors are covered once in ErrorTests.
 4. Follow [quickstart.md](quickstart.md) from an isolated temporary working directory for the
-   end-to-end command sequence. Verify status values, prompt order, and absence of solution text.
+   story-specific walkthroughs, then the full end-to-end sequence after all commands exist.
+   Verify status values, prompt order, and absence of solution text. Include manual SC-004:
+   a first-time student identifies the current challenge and completed count from status
+   without additional instructions; record the observation and resolve unclear labels.
 5. Review the final diff for scope, secrets, generated files, and any change under `StudentWork/`.
    Report any build or test check that could not run.
