@@ -1,0 +1,7 @@
+.dojo/
+**/bin/
+**/obj/
+*.user
+*.suo
+packages/
+TestResults/

@@ -1,0 +1,12 @@
+{
+  "id": "csharp-001",
+  "order": 1,
+  "title": "Predict integer division",
+  "description": "Create your own small C# experiment comparing division with integer operands and decimal operands. Predict each result before running it, then explain any difference.",
+  "hints": [
+    "What types do the operands have, and what result do you predict?",
+    "Try values that do not divide evenly, and inspect the resulting type.",
+    "The operand types determine which division operation C# uses. An integer result cannot retain a fractional part.",
+    "Experiment outline: choose operands; predict type and value; observe both; change one operand type; compare observations."
+  ]
+}

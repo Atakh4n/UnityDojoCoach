@@ -1,0 +1,12 @@
+{
+  "id": "csharp-002",
+  "order": 2,
+  "title": "Investigate a boundary condition",
+  "description": "Design a small C# experiment to investigate a comparison at a chosen threshold. Predict behavior below, at, and above the threshold, then explain how changing the comparison affects the boundary. Write the experiment yourself.",
+  "hints": [
+    "What should happen when the input equals the threshold?",
+    "Test a value on each side of the threshold before testing equality.",
+    "Strict and inclusive comparisons differ at equality. Boundary inputs help reveal a mismatch between intended behavior and a condition.",
+    "Investigation outline: describe the intended rule; list boundary inputs; predict outcomes; run your experiment; compare evidence with the rule."
+  ]
+}

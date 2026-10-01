@@ -134,3 +134,32 @@ and failed next/hint emit no successful change or newly revealed hint.
 Synthetic fixtures must contain generic task text and four safe teaching stages, never student
 solutions. T033 reviews scoped Git changes and creates a checkpoint only during future
 implementation, after validation. No implementation or commit is part of this planning revision.
+
+## Implementation validation evidence (2026-10-01)
+
+- T003: MSTest project restored and built with its production project reference.
+- T015: US1 initially had six expected failures before implementation, then six passing tests;
+  development next-only walkthrough activated, advanced, completed, and preserved exhausted state.
+- T020: US2 initially had four expected failures, then all ten US1/US2 tests passed;
+  seeded status showed one completion and three hints with unchanged saved bytes.
+- T025: US3 initially had four expected failures, then all fourteen story tests passed;
+  the five-call development hint walkthrough stopped at four recorded prompts.
+- T026–T028: Twenty tests passed, including argument/data errors, unreadable progress,
+  interrupted temporary writes, and Windows replacement failures. Previous valid JSON remained
+  byte-for-byte unchanged; failed saves disclosed no new hint/success result.
+- T030: Final restore, Debug build, Release build, and twenty-test suite passed. Builds had
+  zero warnings/errors; the Release apphost exists as `dojo.exe`.
+- T031: Windows apphost combined walkthrough and final completion passed. Unavailable active
+  definitions preserved one completion and three hints; next/hint returned exit 1 and left
+  saved bytes unchanged. Ten-challenge restart checks passed (SC-002). With 100 definitions,
+  one built-executable next call took 0.120 seconds (SC-001).
+- All walkthroughs used isolated temporary directories; no student files or real repository
+  progress were read or modified. Authored prompts were reviewed for teaching order and absence
+  of complete exercise solutions.
+- T032 / SC-004: Passed. Shown the seeded status without additional instructions, the student
+  identified `csharp-002 — Investigate a boundary condition` as current and `1` as the completed
+  count. Both answers matched the displayed state; no label changes were necessary.
+- T033: Final checkpoint review found no scope expansion. Debug and Release builds passed again
+  with zero warnings/errors, all twenty tests passed again, and `git diff --check` passed.
+  The authorized checkpoint contains only implementation, curriculum, tests, documentation,
+  ignore rules, and completed task markers. StudentWork, progress, and build output are excluded.
