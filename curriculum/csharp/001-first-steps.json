@@ -1,12 +1,12 @@
 {
   "id": "csharp-001",
   "order": 1,
-  "title": "Predict integer division",
-  "description": "Create your own small C# experiment comparing division with integer operands and decimal operands. Predict each result before running it, then explain any difference.",
+  "title": "PlayerHealth",
+  "description": "Implement a plain C# PlayerHealth class yourself, without Unity or MonoBehaviour. Expose MaxHealth, CurrentHealth, IsDead, TakeDamage(int amount), and Heal(int amount). CurrentHealth must start equal to MaxHealth and always stay between 0 and MaxHealth. Zero or negative damage and zero or negative healing are invalid. CurrentHealth must not be directly modifiable externally. IsDead must be true when CurrentHealth == 0. Check starting health, boundary values, invalid amounts, and external access yourself.",
   "hints": [
-    "What types do the operands have, and what result do you predict?",
-    "Try values that do not divide evenly, and inspect the resulting type.",
-    "The operand types determine which division operation C# uses. An integer result cannot retain a fractional part.",
-    "Experiment outline: choose operands; predict type and value; observe both; change one operand type; compare observations."
+    "Which parts of the health state should callers be allowed to observe, and which changes should only PlayerHealth control?",
+    "Start with the initial health state and external access rules. Before coding the methods, predict what should happen when damage exceeds current health or healing would exceed maximum health.",
+    "Encapsulation lets a class protect its own state. Treat the range from zero to MaxHealth as an invariant: every valid operation must preserve it. Reject invalid amounts separately from handling valid amounts that reach a boundary. IsDead describes the current state rather than a separate value that can drift out of sync.",
+    "Investigation outline: create an instance; inspect its starting state; choose a normal operation and a boundary case; predict health and death state; invoke the operation; compare observations with the requirements; repeat for healing and invalid amounts. Check separately whether a caller can assign CurrentHealth."
   ]
 }
